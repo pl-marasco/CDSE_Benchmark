@@ -12,7 +12,7 @@ import numpy as np
 from pandas import Timedelta
 
 my_globals = {}
-exec("from osgeo import gdal", my_globals)
+exec("from osgeo import gdal ;gdal.UseExceptions()", my_globals)
 
 
 def path_builder(aoi, catalogue_odata_url, collection_name, product_type, max_cloud_cover, search_period_start,
@@ -46,8 +46,12 @@ def path_builder(aoi, catalogue_odata_url, collection_name, product_type, max_cl
             row = nm_component[5][3:4]
             square = nm_component[5][4:6]
             CDSE_path = glob.glob(os.path.join(root, 'CDSE',
-                                               f'Sentinel-2/MSI/L2A/{yr}/{mm}/{dd}/{product_name}/GRANULE/*/IMG_DATA/R20m/*B07_20m.jp2'))[
-                0]
+                                               f'Sentinel-2/MSI/L2A/{yr}/{mm}/{dd}/{product_name}/GRANULE/*/IMG_DATA/R20m/*B07_20m.jp2'))
+            if len(CDSE_path) > 0:
+                CDSE_path = CDSE_path[0]
+            else:
+                'Processing level not found in the archive'
+                return None, None, None
             AWS_path = os.path.join(root, 'AWS',
                                     f'tiles/{zone}/{row}/{square}/{yr}/{int(mm)}/{int(dd)}/0/R20m/B07.jp2')
             return product_name, CDSE_path, AWS_path
@@ -67,9 +71,9 @@ def main():
     dd_number = 1
 
     root = '/home/pier/'
-    samples = 2
+    samples = 40
 
-
+    print('Loading baits')
     gcp_total = gpd.read_file(r'data/gcp.shp', where="q_score='5'")
 
     random_points_gdf = gcp_total.sample(samples)
@@ -84,7 +88,7 @@ def main():
 
     # base URL of the product catalogue
     catalogue_odata_url = "https://catalogue.dataspace.copernicus.eu/odata/v1"
-
+    print('Waiting for the fish...')
     for row in rnd.iterrows():
         point = row[1].get(key='geometry')
         date = row[1].get(key='date')
@@ -96,17 +100,20 @@ def main():
                                                          max_cloud_cover, search_period_start, search_period_end, root)
 
         if product_name:
+            print('Start fighting in the CDSE lake')
             timing_CDSE = timeit.repeat(f'gdal.Info(\'{CDSE_path}\')',
                                         # setup='from osgeo import gdal',
                                         repeat=repeat_n,
                                         number=number_n,
                                         globals=my_globals)
+
             timing_CDSE = np.array(timing_CDSE) / number_n
             mean_CDSE = np.mean(timing_CDSE).round(3)
             std_CDSE = np.std(timing_CDSE).round(3)
             min_CDSE = np.min(timing_CDSE).round(3)
             max_CDSE = np.max(timing_CDSE).round(3)
 
+            print('Start fighting in the AWS lake')
             timing_AWS = timeit.repeat(f'gdal.Info(\'{AWS_path}\')',
                                        # setup='from osgeo import gdal',
                                        repeat=repeat_n,
@@ -119,6 +126,7 @@ def main():
             max_AWS = np.max(timing_AWS).round(3)
 
             results.append([product_name, mean_CDSE, min_CDSE, max_CDSE, std_CDSE, mean_aws, min_AWS, max_AWS, std_aws])
+            print('Gotch you! Neeeext ...')
 
     results_df = pd.DataFrame(results,
                               columns=['product_name', 'mean_CDSE', 'min_CDSE', 'max_CDSE', 'std_CDSE', 'mean_AWS',
@@ -128,5 +136,5 @@ def main():
 
 
 if __name__ == '__main__':
-    print('Fishing net thrown')
+    print('Fish net thrown')
     main()
