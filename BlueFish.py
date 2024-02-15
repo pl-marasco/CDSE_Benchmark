@@ -101,29 +101,41 @@ def main():
 
         if product_name:
             print('Start fighting in the CDSE lake')
-            timing_CDSE = timeit.repeat(f'gdal.Info(\'{CDSE_path}\')',
-                                        # setup='from osgeo import gdal',
-                                        repeat=repeat_n,
-                                        number=number_n,
-                                        globals=my_globals)
+            try:
+                timing_CDSE = timeit.repeat(f'gdal.Info(\'{CDSE_path}\')',
+                                            # setup='from osgeo import gdal',
+                                            repeat=repeat_n,
+                                            number=number_n,
+                                            globals=my_globals)
 
-            timing_CDSE = np.array(timing_CDSE) / number_n
-            mean_CDSE = np.mean(timing_CDSE).round(3)
-            std_CDSE = np.std(timing_CDSE).round(3)
-            min_CDSE = np.min(timing_CDSE).round(3)
-            max_CDSE = np.max(timing_CDSE).round(3)
+                timing_CDSE = np.array(timing_CDSE) / number_n
+                mean_CDSE = np.mean(timing_CDSE).round(3)
+                std_CDSE = np.std(timing_CDSE).round(3)
+                min_CDSE = np.min(timing_CDSE).round(3)
+                max_CDSE = np.max(timing_CDSE).round(3)
 
-            print('Start fighting in the AWS lake')
-            timing_AWS = timeit.repeat(f'gdal.Info(\'{AWS_path}\')',
-                                       # setup='from osgeo import gdal',
-                                       repeat=repeat_n,
-                                       number=number_n,
-                                       globals=my_globals)
-            timing_AWS = np.array(timing_AWS) / number_n
-            mean_aws = np.mean(timing_AWS).round(3)
-            std_aws = np.std(timing_AWS).round(3)
-            min_AWS = np.min(timing_AWS).round(3)
-            max_AWS = np.max(timing_AWS).round(3)
+                print('Start fighting in the AWS lake')
+            except:
+                mean_CDSE, std_CDSE, min_CDSE, max_CDSE = [0]*5
+
+                print('CDSE lake is dry')
+
+                continue
+            try:
+                timing_AWS = timeit.repeat(f'gdal.Info(\'{AWS_path}\')',
+                                           # setup='from osgeo import gdal',
+                                           repeat=repeat_n,
+                                           number=number_n,
+                                           globals=my_globals)
+                timing_AWS = np.array(timing_AWS) / number_n
+                mean_aws = np.mean(timing_AWS).round(3)
+                std_aws = np.std(timing_AWS).round(3)
+                min_AWS = np.min(timing_AWS).round(3)
+                max_AWS = np.max(timing_AWS).round(3)
+            except:
+                mean_aws, std_aws, min_AWS, max_AWS = [0]*5
+                print('AWS lake is dry')
+                continue
 
             results.append([product_name, mean_CDSE, min_CDSE, max_CDSE, std_CDSE, mean_aws, min_AWS, max_AWS, std_aws])
             print('Gotch you! Neeeext ...')
