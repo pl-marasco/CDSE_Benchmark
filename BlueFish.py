@@ -18,6 +18,10 @@ my_globals = {}
 exec("from osgeo import gdal ;gdal.UseExceptions()", my_globals)
 
 
+def is_directory_empty(directory: str):
+    return len(os.listdir(directory)) == 0
+
+
 def pingttl_server(server: str) -> str:
     server = server.replace("https://", "")
     p = subprocess.Popen(["ping", "-v", "-c 5", f"{server}"], stdout=subprocess.PIPE)
@@ -216,7 +220,7 @@ def result_df():  # -> pd.DataFrame:
     )
 
 
-def main():
+def main(settings: dict):
     # Main function
 
     print("Preparing the fishing rod...")
@@ -292,6 +296,22 @@ def main():
 if __name__ == "__main__":
     print("Welcome to the BlueFish lake!")
     try:
-        main()
+        try:
+            if os.path.exists("/root/testbed/settings.yml"):
+                settings = config_reader()
+            else:
+                print("Settings file not found!")
+                raise FileNotFoundError
+
+            if os.path.exists("/root/cdse/"):
+                if len(os.listdir("/root/cdse/")) == 0:
+                    print("The /root/cdse directory is empty! Please check the credentials settings.")
+                    raise FileNotFoundError
+
+        except FileNotFoundError:
+            print("Something went wrong! Please check the settings file. Exiting...")
+            exit()
+
+        main(settings)
     except KeyboardInterrupt:
         print("Caught KeyboardInterrupt, stop the fishing!")
