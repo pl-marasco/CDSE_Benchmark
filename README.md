@@ -41,11 +41,8 @@ To run the CDSE S3 testbed, you need to have the following installed on your sys
 - [ ] A valid account on [Amazon Web Services](https://aws.amazon.com/) (AWS) to access the satellite imagery data.
 
 Copy all the files in the `./docker` folder of your system. The `./docker` has to contain the following files:
-- BlueFish.py
 - credential
 - Dockerfile
-- environment.yml
 - settings
-- README
 
 Follow the instructions in the README file to run the CDSE S3 testbed.

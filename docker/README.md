@@ -43,9 +43,7 @@ To run the CDSE S3 testbed, you need to have the following installed on your sys
 Copy all the files in the `./docker` folder of your system. The `./docker` has to contain the following files:
 - credential
 - Dockerfile
-- environment.yml
 - settings
-- README.md
 
 ## Instructions
 ***
