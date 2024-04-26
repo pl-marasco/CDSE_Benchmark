@@ -58,7 +58,8 @@ RUN <<EOT
       mkdir -p /root/.aws
 EOT
 
-COPY ../data/GCP.7z /root/testbed/data
+RUN wget https://s3.waw3-1.cloudferro.com/swift/v1/Benchmark/GCP.7z -O /root/testbed/data/GCP.7z
+#COPY ../data/GCP.7z /root/testbed/data
 COPY *.py /root/testbed
 COPY settings.yml /root/testbed
 COPY credentials /root/.aws
