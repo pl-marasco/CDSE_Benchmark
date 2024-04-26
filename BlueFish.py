@@ -268,6 +268,7 @@ def main():
         if ping_ttl:
             with open(os.path.join(settings["Local"]["output"], f"CDSE_ping_{stamp}.txt"), "w") as f:
                 f.write(ping_ttl)
+            print(f"CDSE ping is saved! file name: CDSE_ping_{stamp}.txt")
         else:
             print("Ping error")
 
