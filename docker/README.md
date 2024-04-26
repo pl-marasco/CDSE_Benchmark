@@ -68,6 +68,7 @@ Adequate environment variables have to be set in the `./settings` file.
 
 ```
 Collection:
+  endpoint: "https://eodata.dataspace.copernicus.eu" # define the endpoint of the collection  
   collection_name: SENTINEL-2
   product_type: S2MSI2A
   max_cloud_cover: 100                  # [not activated feature] define the max cloud cover percentage 
@@ -80,18 +81,18 @@ Analysis:
   number_n: 1                           # define the number of repetitions within the same run (1 sould be enough) 
   dd_number: 7                          # define the expation time window that has to be considerd from the randomly selected date (es.7 would create a time span like the one here reported 07/01/2024 -> 01/01/2024 - 14/01/2024)
   endpoints: ['cdse']                   # define the endpoints to be used (for both ['cdse', 'aws'])
+  ping: True                            # define if the ping has to be performed                            
 ControlPoints:
   path: ~/testbed/data/gcp.shp          # define the path to the control points (don't change if not needed)
   q_score: 5                            # define the quality score
-  ping: True                            # define if the ping has to be performed                            
 Catalog:
   url: "https://catalogue.dataspace.copernicus.eu/odata/v1"         # define the url of the catalog used to select the observations
   endpoint: CDSE                        # define the endpoint to be used
 Local:
-    aws: ~/aws                          # do not change
-    cdse: ~/cdse                        # do not change
-    data: ~/testbed/data                # do not change
-    output: ~/testbed/output            # do not change
+    aws: /root/aws                      # do not change
+    cdse: /root/cdse                    # do not change
+    data: /root/testbed/data            # do not change
+    output: /root/testbed/output        # do not change
 ```
 
 ### 3 - Build the docker image
@@ -108,7 +109,7 @@ run the docker image in privileged and detach mode with the following command:
 
 ### 5 - Get the container ID
 
-If you don't use a pre defined name to get the container id the following command can be used:
+If you don't use a pre-defined name to get the container id the following command can be used:
 
 ``docker ps``
 
