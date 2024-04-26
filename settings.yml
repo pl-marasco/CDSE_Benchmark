@@ -1,0 +1,25 @@
+Collection:
+  endpoint: "https://eodata.dataspace.copernicus.eu"
+  collection_name: SENTINEL-2
+  product_type: S2MSI2A
+  max_cloud_cover: 100
+  start_date: 2020-01-01
+  end_date: 2024-02-29
+Analysis:
+  benchmark: info
+  n_samples: 10
+  repeat_n: 1
+  number_n: 1
+  dd_number: 7
+  endpoints: ['cdse']
+ControlPoints:
+  path: ./data/gcp.shp
+  q_score: 5
+Catalog:
+  url: "https://catalogue.dataspace.copernicus.eu/odata/v1"
+  endpoint: CDSE
+Local:
+    aws: /home/pier/AWS
+    cdse: /home/pier/CDSE
+    data: /home/pier/PycharmProjects/CDSE_Benchmark/data
+    output: /home/pier/PycharmProjects/CDSE_Benchmark/output

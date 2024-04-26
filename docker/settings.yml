@@ -1,0 +1,24 @@
+Collection:
+  collection_name: SENTINEL-2
+  product_type: S2MSI2A
+  max_cloud_cover: 100
+  start_date: 2020-01-01
+  end_date: 2024-02-29
+Analysis:
+  benchmark: info
+  n_samples: 100
+  repeat_n: 1
+  number_n: 1
+  dd_number: 10
+  endpoints: ['cdse']
+ControlPoints:
+  path: ~/testbed/data/gcp.shp
+  q_score: 5
+Catalog:
+  url: "https://catalogue.dataspace.copernicus.eu/odata/v1"
+  endpoint: CDSE
+Local:
+    aws: /root/aws
+    cdse: /root/cdse
+    data: /root/testbed/data
+    output: /root/testbed/output
