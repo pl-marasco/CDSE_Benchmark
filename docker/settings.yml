@@ -1,4 +1,5 @@
 Collection:
+  endpoint: "https://eodata.dataspace.copernicus.eu"
   collection_name: SENTINEL-2
   product_type: S2MSI2A
   max_cloud_cover: 100
@@ -11,6 +12,7 @@ Analysis:
   number_n: 1
   dd_number: 10
   endpoints: ['cdse']
+  ping: True
 ControlPoints:
   path: ~/testbed/data/gcp.shp
   q_score: 5
