@@ -18,25 +18,20 @@ my_globals = {}
 exec("from osgeo import gdal ;gdal.UseExceptions()", my_globals)
 
 
-def pingttl_server(server):
+def pingttl_server(server: str) -> str:
     server = server.replace("https://", "")
     p = subprocess.Popen(["ping", "-v", "-c 5", f"{server}"], stdout=subprocess.PIPE)
     res = p.communicate()[0]
     if p.returncode > 0:
         print("server error")
     else:
-        pattern = re.compile("ttl=\d*")
-        ttl = int(pattern.search(str(res)).group().split("=")[1])
-        pattern = re.compile("time=\d*.\d*")
-        ping = float(pattern.search(str(res)).group().split("=")[1])
-
-    return [ping, ttl]
+        return res.decode("utf-8")
 
 
 def config_reader() -> dict:
     # Read the settings file and return the dictionary
-    with open("/root/testbed/settings.yml") as json_file:
-        settings = yaml.safe_load(json_file)
+    with open("/root/testbed/settings.yml") as yaml_file:
+        settings = yaml.safe_load(yaml_file)
     return settings
 
 
@@ -264,7 +259,18 @@ def main():
             )
 
     print("Fishes are in the basket! let's go home!")
+
     stamp = datetime.datetime.now().strftime("_%Y%m%d_%H%M")
+
+    if settings["Analysis"]["ping"]:
+        ping_ttl = pingttl_server(settings["Catalog"]["url"])
+
+        if ping_ttl:
+            with open(os.path.join(settings["Local"]["output"], f"CDSE_ping_{stamp}.txt"), "w") as f:
+                f.write(ping_ttl)
+        else:
+            print("Ping error")
+
     if "cdse" in settings["Analysis"]["endpoints"]:
         file_name = f"CDSE{stamp}.csv"
         results_CDSE.to_csv(

@@ -12,6 +12,7 @@ Analysis:
   number_n: 1
   dd_number: 7
   endpoints: ['cdse']
+  ping: True
 ControlPoints:
   path: ./data/gcp.shp
   q_score: 5
