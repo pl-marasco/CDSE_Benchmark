@@ -36,6 +36,7 @@ RUN <<EOT
 EOT
 RUN <<EOT 
     # Creates env testbed
+    wget https://raw.githubusercontent.com/pl-marasco/CDSE_Benchmark/master/environment.py -O /tmp/environment.yml
     export PATH=$PATH:/root/miniconda3/bin
     conda env create -f /tmp/environment.yml -y
     conda init bash
