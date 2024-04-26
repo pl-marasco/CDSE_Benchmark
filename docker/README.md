@@ -41,12 +41,10 @@ To run the CDSE S3 testbed, you need to have the following installed on your sys
 - [ ] A valid account on [Amazon Web Services](https://aws.amazon.com/) (AWS) to access the satellite imagery data.
 
 Copy all the files in the `./docker` folder of your system. The `./docker` has to contain the following files:
-- BlueFish.py
 - credential
 - Dockerfile
 - environment.yml
 - settings
-- GCP.7z
 - README.md
 
 ## Instructions
@@ -85,6 +83,7 @@ Analysis:
 ControlPoints:
   path: ~/testbed/data/gcp.shp          # define the path to the control points (don't change if not needed)
   q_score: 5                            # define the quality score
+  ping: True                            # define if the ping has to be performed                            
 Catalog:
   url: "https://catalogue.dataspace.copernicus.eu/odata/v1"         # define the url of the catalog used to select the observations
   endpoint: CDSE                        # define the endpoint to be used
@@ -132,6 +131,12 @@ Once the script has finished, you will see a typical message.
 Copy the output from the container to the host with the following command:
 
 ``docker cp guybrush_threepwood:/root/testbed/output/name_from_the_output .`` 
+
+### 7 (Optional) - Copy the ping ttl output
+
+Copy the output from the container to the host with the following command:
+
+``docker cp guybrush_threepwood:/root/testbed/output/CDSE_ping_timestamp.txt .``
 
 ### 8 - Stop the container
 Stop the container with the following command:
