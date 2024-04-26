@@ -60,7 +60,7 @@ EOT
 
 RUN <<EOT
       wget https://s3.waw3-1.cloudferro.com/swift/v1/Benchmark/GCP.7z -O /root/testbed/data/GCP.7z
-      wget https://github.com/pl-marasco/CDSE_Benchmark/blob/master/BlueFish.py -O /root/testbed/BlueFish.py
+      wget https://raw.githubusercontent.com/pl-marasco/CDSE_Benchmark/master/BlueFish.py -O /root/testbed/BlueFish.py
 EOT
 COPY settings.yml /root/testbed
 COPY credentials /root/.aws
