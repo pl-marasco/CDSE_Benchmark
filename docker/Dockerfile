@@ -11,6 +11,7 @@ RUN <<EOT
     nano \
     g++ \
     p7zip-full \
+    iputils-ping \
     s3fs
     rm -rf /var/lib/apt/lists/* 
     apt autoclean
