@@ -17,10 +17,8 @@ RUN <<EOT
     apt autoclean
 EOT
 
-ADD environment.yml /tmp/environment.yml
-
 SHELL ["/bin/bash", "-c"]
-RUN <<EOT 
+RUN <<EOT
     # Install Conda
     wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
     mkdir /root/.conda 
@@ -34,7 +32,7 @@ RUN <<EOT
     conda update -n base conda -y 
     conda install mamba -c conda-forge -y
 EOT
-RUN <<EOT 
+RUN <<EOT
     # Creates env testbed
     wget https://raw.githubusercontent.com/pl-marasco/CDSE_Benchmark/master/environment.yml -O /tmp/environment.yml
     export PATH=$PATH:/root/miniconda3/bin
@@ -64,6 +62,7 @@ RUN <<EOT
       wget https://s3.waw3-1.cloudferro.com/swift/v1/Benchmark/GCP.7z -O /root/testbed/data/GCP.7z
       wget https://raw.githubusercontent.com/pl-marasco/CDSE_Benchmark/master/BlueFish.py -O /root/testbed/BlueFish.py
 EOT
+
 COPY settings.yml /root/testbed
 COPY credentials /root/.aws
 
