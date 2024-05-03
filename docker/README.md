@@ -54,12 +54,16 @@ Configure the credentials for the S3 Copernicus Data and AWS sources in the `./c
 ```aws_access_key_id``` and ```aws_secret_access_key``` 
 have to be set for the resources to be accessed.
 
-To get credentials, please visit [CDSE](https://documentation.dataspace.copernicus.eu/APIs/S3.html) and [AWS documentation](https://docs.aws.amazon.com/cli/latest/userguide/cli-authentication-short-term.html).
+The credential file will be automatically copied to the docker container and used to access the resources.
+That's why it is important to edit the credential file before building the container.
+
+**To get credentials**, please visit [CDSE](https://documentation.dataspace.copernicus.eu/APIs/S3.html) and [AWS documentation](https://docs.aws.amazon.com/cli/latest/userguide/cli-authentication-short-term.html).
+
 
 > NOTE:
 > - Credentials from the CDSE are mandatory, while the AWS credentials are optional. If the AWS credentials are not provided, the script will only retrieve data from the CDSE source.
-> - CREODIAS's S3 Object Storage credentials are ***NOT*** valid to get access to the CDSE resources.  
-
+> <br/></br>
+> - Credentials required to access the resource can only be obtained by following the instructions linked above. If you experience any issue, the first suggestion is to test them directly on your system before letting the script using them in the docker container.
 
 ### 2 - Set the environment variables
 Adequate environment variables have to be set in the `./settings` file.
@@ -92,7 +96,7 @@ Local:
     data: /root/testbed/data            # do not change
     output: /root/testbed/output        # do not change
 ```
-
+ 
 ### 3 - Build the docker image
 build the docker image with the following command:
 
@@ -125,6 +129,8 @@ To run the testbed, you need to execute the following command:
 If you get back '"No results for POINT (x y)" it means that the point is not covered by the satellite imagery for that specific date.
 Don't worry, the script will continue to the next point.
 Once the script has finished, you will see a typical message.
+
+>NOTE: o facilitate the repetition of the test, a bash script named 'BlueFish.sh' has been created. This script will automatically run steps 3, 4, and 6.
 
 ### 7 - Copy the output
 Copy the output from the container to the host with the following command:
