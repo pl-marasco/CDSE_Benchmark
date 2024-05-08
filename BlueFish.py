@@ -119,13 +119,14 @@ def benchmarker_info(path: str, settings: dict):
         timing = np.array(timing) / settings["Analysis"]["number_n"]
         mean = np.mean(timing).round(3)
         std = np.std(timing).round(3)
-        min = np.min(timing).round(3)
-        max = np.max(timing).round(3)
+        min_val = np.min(timing).round(3)
+        max_val = np.max(timing).round(3)
+        size = os.path.getsize(path)
 
     except Exception as e:
-        mean, std, min, max = [0] * 4
+        mean, std, min_val, max_val, size = [0] * 5
 
-    return mean, std, min, max
+    return mean, std, min_val, max_val, size
 
 
 def scene_selector(settings: dict) -> pd.DataFrame:
@@ -216,6 +217,7 @@ def result_df():  # -> pd.DataFrame:
             "min": pd.Series(dtype="float32"),
             "max": pd.Series(dtype="float32"),
             "std": pd.Series(dtype="float32"),
+            "size": pd.Series(dtype="int32"),
         }
     )
 
@@ -237,27 +239,27 @@ def main(settings: dict):
         AWS_path = row.iloc[2]
 
         if "cdse" in settings["Analysis"]["endpoints"]:
-            mean_CDSE, std_CDSE, min_CDSE, max_CDSE = benchmarker_info(
+            mean_CDSE, std_CDSE, min_CDSE, max_CDSE, size_CDSE = benchmarker_info(
                 CDSE_path, settings
             )
             results_CDSE = pd.concat(
                 (
                     results_CDSE,
                     pd.DataFrame(
-                        [[product_name, mean_CDSE, min_CDSE, max_CDSE, std_CDSE]],
-                        columns=["product_name", "mean", "min", "max", "std"],
+                        [[product_name, mean_CDSE, min_CDSE, max_CDSE, std_CDSE, size_CDSE]],
+                        columns=["product_name", "mean", "min", "max", "std", "size"],
                     ),
                 )
             )
 
         if "aws" in settings["Analysis"]["endpoints"]:
-            mean_AWS, std_AWS, min_AWS, max_AWS = benchmarker_info(AWS_path, settings)
+            mean_AWS, std_AWS, min_AWS, max_AWS, size_AWS = benchmarker_info(AWS_path, settings)
             results_AWS = pd.concat(
                 (
                     results_AWS,
                     pd.DataFrame(
-                        [[product_name, mean_AWS, min_AWS, max_AWS, std_AWS]],
-                        columns=["product_name", "mean", "min", "max", "std"],
+                        [[product_name, mean_AWS, min_AWS, max_AWS, std_AWS, size_AWS]],
+                        columns=["product_name", "mean", "min", "max", "std", "size"],
                     ),
                 )
             )
