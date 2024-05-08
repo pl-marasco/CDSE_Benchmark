@@ -241,26 +241,26 @@ def main(settings: dict):
         AWS_path = row.iloc[2]
 
         if "cdse" in settings["Analysis"]["endpoints"]:
-            mean_CDSE, std_CDSE, min_CDSE, max_CDSE, size_CDSE, Mbps_CDSE = benchmarker_info(
+            mean_CDSE, std_CDSE, min_CDSE, max_CDSE, size_CDSE, MBps_CDSE = benchmarker_info(
                 CDSE_path, settings
             )
             results_CDSE = pd.concat(
                 (
                     results_CDSE,
                     pd.DataFrame(
-                        [[product_name, mean_CDSE, min_CDSE, max_CDSE, std_CDSE, size_CDSE]],
+                        [[product_name, mean_CDSE, min_CDSE, max_CDSE, std_CDSE, size_CDSE, MBps_CDSE]],
                         columns=["product_name", "mean", "min", "max", "std", "size", "MBps"],
                     ),
                 )
             )
 
         if "aws" in settings["Analysis"]["endpoints"]:
-            mean_AWS, std_AWS, min_AWS, max_AWS, size_AWS, Mbps_AWS = benchmarker_info(AWS_path, settings)
+            mean_AWS, std_AWS, min_AWS, max_AWS, size_AWS, MBps_AWS = benchmarker_info(AWS_path, settings)
             results_AWS = pd.concat(
                 (
                     results_AWS,
                     pd.DataFrame(
-                        [[product_name, mean_AWS, min_AWS, max_AWS, std_AWS, size_AWS]],
+                        [[product_name, mean_AWS, min_AWS, max_AWS, std_AWS, size_AWS, MBps_AWS]],
                         columns=["product_name", "mean", "min", "max", "std", "size", "MBps"],
                     ),
                 )
