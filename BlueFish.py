@@ -122,11 +122,12 @@ def benchmarker_info(path: str, settings: dict):
         min_val = np.min(timing).round(3)
         max_val = np.max(timing).round(3)
         size = os.path.getsize(path)
+        MBps = size  / (np.mean(timing) * 1e-6)
 
     except Exception as e:
-        mean, std, min_val, max_val, size = [0] * 5
+        mean, std, min_val, max_val, size, MBps = [0] * 6
 
-    return mean, std, min_val, max_val, size
+    return mean, std, min_val, max_val, size, MBps
 
 
 def scene_selector(settings: dict) -> pd.DataFrame:
@@ -218,6 +219,7 @@ def result_df():  # -> pd.DataFrame:
             "max": pd.Series(dtype="float32"),
             "std": pd.Series(dtype="float32"),
             "size": pd.Series(dtype="int32"),
+            "MBps": pd.Series(dtype="float32"),
         }
     )
 
@@ -239,7 +241,7 @@ def main(settings: dict):
         AWS_path = row.iloc[2]
 
         if "cdse" in settings["Analysis"]["endpoints"]:
-            mean_CDSE, std_CDSE, min_CDSE, max_CDSE, size_CDSE = benchmarker_info(
+            mean_CDSE, std_CDSE, min_CDSE, max_CDSE, size_CDSE, Mbps_CDSE = benchmarker_info(
                 CDSE_path, settings
             )
             results_CDSE = pd.concat(
@@ -247,19 +249,19 @@ def main(settings: dict):
                     results_CDSE,
                     pd.DataFrame(
                         [[product_name, mean_CDSE, min_CDSE, max_CDSE, std_CDSE, size_CDSE]],
-                        columns=["product_name", "mean", "min", "max", "std", "size"],
+                        columns=["product_name", "mean", "min", "max", "std", "size", "MBps"],
                     ),
                 )
             )
 
         if "aws" in settings["Analysis"]["endpoints"]:
-            mean_AWS, std_AWS, min_AWS, max_AWS, size_AWS = benchmarker_info(AWS_path, settings)
+            mean_AWS, std_AWS, min_AWS, max_AWS, size_AWS, Mbps_AWS = benchmarker_info(AWS_path, settings)
             results_AWS = pd.concat(
                 (
                     results_AWS,
                     pd.DataFrame(
                         [[product_name, mean_AWS, min_AWS, max_AWS, std_AWS, size_AWS]],
-                        columns=["product_name", "mean", "min", "max", "std", "size"],
+                        columns=["product_name", "mean", "min", "max", "std", "size", "MBps"],
                     ),
                 )
             )
