@@ -122,7 +122,7 @@ def benchmarker_info(path: str, settings: dict):
         min_val = np.min(timing).round(3)
         max_val = np.max(timing).round(3)
         size = os.path.getsize(path)
-        MBps = size  / (np.mean(timing) * 1e-6)
+        MBps = np.round(size / (np.mean(timing) * 1e6),3)
 
     except Exception as e:
         mean, std, min_val, max_val, size, MBps = [0] * 6
