@@ -12,7 +12,8 @@ RUN <<EOT
     g++ \
     p7zip-full \
     iputils-ping \
-    s3fs
+    s3fs \
+    procps
     rm -rf /var/lib/apt/lists/* 
     apt autoclean
 EOT
@@ -88,7 +89,20 @@ RUN <<EOT
     echo "s3fs sentinel-s2-l2a ~/aws -o url=https://s3-eu-central-1.amazonaws.com -o endpoint=eu-central-1 -o sigv4 -o requester_pays -o profile=aws -o use_cache="" ">>/root/.bashrc
     #echo "# allow all users to create icmp sockets\n net.ipv4.ping_group_range=0 2147483647" | sudo tee -a /etc/sysctl.d/ping_group.conf
     #echo "s3fs#eodata /root/cdse fuse _netdev,allow_other,nonempty,umask=000,uid=0,gid=0,profile=cdse,url=https://eodata.dataspace.copernicus.eu 0 0">> /etc/fstab
+EOT
+
+RUN <<EOT
     sed -i '/user_allow_other/s/^#//g' /etc/fuse.conf
+    cat >> /etc/sysctl.conf <<EOL
+net.core.rmem_max=2147483647
+net.core.wmem_max=2147483647
+net.ipv4.tcp_rmem=8192 262144 536870912
+net.ipv4.tcp_wmem=4096 65536 536870912
+net.core.default_qdisc=fq
+net.ipv4.tcp_congestion_control=bbr
+net.core.netdev_max_backlog=300000
+net.core.somaxconn=65535
+EOL
 EOT
 
 ENV CONDA_DEFAULT_ENV testbed
