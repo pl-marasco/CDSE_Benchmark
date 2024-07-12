@@ -16,9 +16,12 @@ The CDSE S3 testbed is a Python program designed to interact with a satellite im
 
 The script is designed to be run in a Docker container, as indicated by the Docker commands below. The Docker container provides a controlled environment for the script to run in, ensuring that the performance measurements are consistent across different runs.
 
+5. **WMS Latency Evaluation:** It measures the WMS GetCapabilities and GetMap Requests. 
 
 ## Benchmarking Methodology
 ***
+### **BlueFish.py**
+
 The benchmark is performed using a GDALINFO through the OSGEO module in Python. The Sentinel Band 7 has been selected out of the more common one to limit the risk of pre-caching.
 
 GDALIFO has been selected as it is a common tool used in the geospatial community and it is able to provide a good estimation of the time needed to perform the reads of the metadata data.
@@ -30,6 +33,12 @@ Object storages from the resources are automatically mounted in the docker conta
 The cache, from the client side is disabled, to avoid any bias in the benchmark. 
 As we are aware that some service provider seems to offer a cache system on the server side that cannot be disabled, a meetingation that could be taken is to test each point only once 
 
+### **WMSLatency.py**
+
+The benchark accepts as input a valid CDSE INSTANCE_ID, an output path for the generated reports (csv) and an integer number defining how many times (repeats) the test will be performed. 
+
+- For each repeat the GetCapabilities request is performed and the response time is measured. Then the system sleeps for a random number of seconds (between 2 and 9). For the number of repeats the mean, median, and standrd deviation are computed
+- Similarly the GetMap is measured as well. For each repeat a random layer and random respective style are selected from the available set. The test delivers the same results per layer and in total.
 
 
 ## Prerequisites
